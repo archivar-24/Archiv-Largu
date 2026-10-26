@@ -1,0 +1,444 @@
+
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111318">
+
+  <title>ARCHIV 24</title>
+
+  <style>
+    :root {
+      --bg: #111318;
+      --panel: #1b1d22;
+      --panel-light: #24262c;
+      --border: #68616a;
+      --text: #e7e0d5;
+      --muted: #aaa4a0;
+      --accent: #b9a17b;
+      --red: #a65353;
+      --success: #b9c5a5;
+      --error: #df9290;
+      --glow: rgba(185, 161, 123, .12);
+    }
+    * { box-sizing: border-box; }
+    html { min-height: 100%; background: var(--bg); }
+    body {
+      margin: 0; min-height: 100vh; color: var(--text); position: relative;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(102, 110, 130, .18), transparent 58%),
+        repeating-linear-gradient(0deg, rgba(222, 215, 205, .012) 0 1px, transparent 1px 4px),
+        #111318;
+      font-family: Georgia, "Times New Roman", serif; letter-spacing: .025em;
+    }
+    body::before {
+      content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 5; opacity: .22;
+      background: repeating-linear-gradient(115deg, transparent 0 13px, rgba(219, 185, 117, .035) 14px, transparent 15px 31px);
+    }
+    body::after {
+      content: "✦  SIGILLUM ARCHIVI · XXIV  ✦"; position: fixed; right: 14px; bottom: 9px;
+      color: #9a7948; opacity: .65; font-size: 9px; letter-spacing: .18em; pointer-events: none; z-index: 6;
+    }
+    button, input { font: inherit; }
+    .container { width: min(100% - 32px, 900px); margin: 0 auto; }
+    header { padding: 38px 0 25px; text-align: center; border-bottom: 1px solid #5e482a; position: relative; }
+    header::before { content: "✧ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ✧"; display: block; margin-bottom: 18px; color: #987747; font-size: 10px; letter-spacing: .12em; }
+    header::after { content: "ZÁZNAM ZAPEČETĚNÝ · PŘÍSTUP JEN PRO POVOLANÉ"; display: block; margin-top: 16px; color: #a88c5a; font-size: 9px; letter-spacing: .2em; }
+    .symbol { color: var(--accent); font-size: 32px; display: block; margin-bottom: 4px; text-shadow: 0 0 18px var(--glow); }
+    h1 { margin: 0; font-weight: normal; font-size: clamp(35px, 7vw, 62px); letter-spacing: .16em; color: #e0c58b; text-shadow: 0 2px #3c2815, 0 0 24px #c99b4b25; }
+    .subtitle { margin: 12px 0 0; color: var(--muted); font-size: 10px; letter-spacing: .22em; line-height: 1.9; text-transform: uppercase; }
+    .subtitle::before { content: "☩  "; color: var(--accent); }
+    main { padding: 30px 0 48px; min-height: 58vh; }
+    .panel { position: relative; padding: clamp(22px, 5vw, 42px); border: 1px solid var(--border); outline: 1px solid #4c3820; outline-offset: -7px; background: linear-gradient(135deg, rgba(126, 88, 38, .12), transparent 42%), var(--panel); box-shadow: 0 18px 70px #000b, inset 0 0 40px #0005; }
+    .panel::before { content: "✦ ZÁKON ARCHIVU · ZÁZNAM XXIV ✦"; position: absolute; top: -9px; left: 50%; transform: translateX(-50%); white-space: nowrap; padding: 2px 10px; color: #b79a64; background: var(--bg); font-size: 9px; letter-spacing: .12em; }
+    h2 { margin-top: 18px; font-weight: normal; font-size: clamp(23px, 4vw, 32px); color: #e8d4a6; }
+    h2::before { content: "❧  "; color: var(--accent); }
+    h3 { font-weight: normal; letter-spacing: .04em; color: #d9c18c; }
+    .muted { color: var(--muted); line-height: 1.85; font-size: 13px; }
+    label { display: block; margin: 24px 0 9px; color: #d4b574; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; }
+    label::before { content: "✧ "; color: var(--accent); }
+    input { display: block; width: 100%; min-height: 52px; padding: 14px; border: 1px solid #70552f; border-radius: 0; outline: none; background: #120e09; color: #f1dfb5; caret-color: var(--accent); transition: border-color .2s, box-shadow .2s; }
+    input::placeholder { color: #7c6848; font-style: italic; }
+    input:focus { border-color: var(--accent); box-shadow: 0 0 0 1px #c9a45b40, inset 0 0 18px #c9a45b0d, 0 0 16px #c9a45b18; }
+    button { min-height: 46px; padding: 12px 18px; border: 1px solid var(--accent); border-radius: 0; background: #392817; color: #ead5a2; cursor: pointer; text-transform: uppercase; font-size: 10px; letter-spacing: .14em; transition: background .2s, color .2s, border-color .2s, box-shadow .2s; }
+    button:hover { background: #6b4b25; color: #fff1cc; box-shadow: 0 0 18px #c9a45b25; }
+    button:focus-visible { outline: 2px solid white; outline-offset: 3px; }
+    button:active { transform: translateY(1px); }
+    .primary { width: 100%; margin-top: 18px; background: #302216; border-color: #a9854a; position: relative; text-align: left; }
+    .primary::before { content: "ZAPEČETIT  ·  "; color: #b28d50; }
+    .primary::after { content: "  ✧"; float: right; font-size: 16px; }
+    .secondary { border-color: #70552f; background: transparent; color: #c5aa75; }
+    .secondary:hover { background: #302416; color: white; }
+    .message { min-height: 24px; margin: 16px 0 0; line-height: 1.6; font-size: 12px; }
+    .error { color: var(--error); }
+    .error::before { content: "[ PEČEŤ ODMÍTLA PŘÍSTUP ]  "; }
+    .success { color: var(--success); }
+    .success::before { content: "[ PEČEŤ UZNÁNA ]  "; }
+    .profile-heading { padding-bottom: 20px; border-bottom: 1px dashed #70552f; }
+    .eyebrow { color: #c2a365; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; }
+    .eyebrow::before { content: "☩  "; color: var(--accent); }
+    .motto { margin: 24px 0; padding: 16px 18px; border-left: 2px solid var(--accent); background: linear-gradient(90deg, #c9a45b12, transparent); color: #d8c49a; font-style: italic; line-height: 1.9; }
+    .task-panel { margin-top: 28px; padding: clamp(18px, 4vw, 28px); border: 1px solid #70552f; background: linear-gradient(135deg, #2a2116, #17120c 65%); position: relative; }
+    .task-panel::after { content: "ZÁZNAM JE ZAPEČETĚN · NEŠÍŘIT MIMO KRUH STRÁŽKYŇ"; display: block; margin-top: 24px; padding-top: 12px; border-top: 1px dashed #70552f; color: #92764b; font-size: 9px; letter-spacing: .14em; text-align: right; }
+    .task-content { margin-top: 18px; padding: 20px; border: 1px dashed #9a7844; background: #17120c; line-height: 1.85; box-shadow: inset 0 0 22px #c9a45b08; }
+    .task-content[hidden], .screen[hidden] { display: none; }
+    .task-list { padding-left: 20px; line-height: 1.9; }
+    .top-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+    footer { padding: 18px 0 26px; border-top: 1px solid #5e482a; color: #9b8053; font-size: 9px; letter-spacing: .16em; line-height: 2; text-align: center; }
+    footer::before { content: "✦  ARCHIV ZAPEČETĚN  /  "; color: var(--accent); }
+    .archive-art {
+      height: 180px;
+      position: relative;
+      overflow: hidden;
+      margin: 0 auto 22px;
+      border: 1px solid var(--border);
+      background: #191b20;
+    }
+    .archive-art img {
+      width: 100%; height: 100%; object-fit: cover; object-position: center 44%;
+      display: block; opacity: .78; filter: saturate(.62) contrast(1.04);
+    }
+    .archive-art::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(90deg, rgba(15,17,22,.88), rgba(15,17,22,.15) 72%, rgba(15,17,22,.25));
+      pointer-events: none;
+    }
+    .archive-art-label {
+      position: absolute; z-index: 1; left: 22px; bottom: 18px;
+      color: #e7e0d5; font-size: 10px; letter-spacing: .18em; line-height: 1.9;
+      text-shadow: 0 2px 6px #000;
+    }
+    .archive-art-label span { font-size: 22px; letter-spacing: .22em; }
+
+    @media (max-width: 480px) { .subtitle { letter-spacing: .12em; } .panel { padding: 22px 18px; } .panel::before { font-size: 8px; } h1 { letter-spacing: .09em; } .task-panel { padding: 16px; } body::after { display: none; } header::before { letter-spacing: 0; font-size: 8px; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+  </style>
+</head>
+
+<body>
+  <header class="container">
+    <div class="symbol" aria-hidden="true">☩</div>
+    <h1>ARCHIV 24</h1>
+    <div class="subtitle">
+      PĚT STRÁŽKYŇ. JEDNO TAJEMSTVÍ.  ·  ZÁZNAM Z DOBY ZAPOMENUTÉ MAGIE
+    </div>
+  </header>
+
+  <div class="archive-art container" aria-label="Pohled do staré knihovny" role="img">
+    <img src="archiv24_knihovna.png" alt="Temná starobylá knihovna s gotickým oknem a svíčkami">
+    <div class="archive-art-label"><span>ARCHIV 24</span><br>ODDĚLENÍ ZAKÁZANÝCH ZÁZNAMŮ</div>
+  </div>
+
+  <main class="container">
+
+    <!-- OBRAZOVKA PRO ZADÁNÍ OSOBNÍHO KÓDU -->
+    <section class="panel screen" id="loginScreen">
+      <div class="eyebrow">Pečeť přístupu</div>
+      <h2>Vstup do archivu</h2>
+
+      <p class="muted">
+        Některé záznamy byly zapečetěny před zraky světa.\n        Archiv zaznamenal tvou přítomnost. Ukaž pečeť, která ti náleží.
+      </p>
+
+      <form id="loginForm">
+        <label for="personalCode">Osobní pečeť</label>
+        <input
+          id="personalCode"
+          type="password"
+          autocomplete="off"
+          autocapitalize="characters"
+          spellcheck="false"
+          placeholder="Vlož znak své pečeti..."
+          required
+        >
+
+        <button class="primary" type="submit">
+          Vstoupit do archivu
+        </button>
+      </form>
+
+      <p id="loginMessage" class="message" aria-live="polite"></p>
+    </section>
+
+    <!-- OSOBNÍ PROFIL -->
+    <section class="panel screen" id="profileScreen" hidden>
+      <div class="top-row">
+        <span class="eyebrow">Osobní záznam</span>
+        <button class="secondary" id="logoutButton" type="button">
+          Odhlásit se
+        </button>
+      </div>
+
+      <div class="profile-heading">
+        <h2 id="guardianName"></h2>
+        <p class="muted" id="guardianRole"></p>
+      </div>
+
+      <blockquote class="motto" id="guardianMotto"></blockquote>
+
+      <p class="muted" id="guardianDescription"></p>
+
+      <!-- DENNÍ ÚKOL -->
+      <section class="task-panel">
+        <div class="eyebrow">Denní záznam</div>
+        <h3>Odemkni dnešní úkol</h3>
+
+        <p class="muted">
+          Každý den můžeš získat nový kód a objevit další část případu.
+        </p>
+
+        <form id="taskForm">
+          <label for="dailyCode">Znak denního záznamu</label>
+          <input
+            id="dailyCode"
+            type="password"
+            autocomplete="off"
+            autocapitalize="characters"
+            spellcheck="false"
+            placeholder="Vlož znak záznamu..."
+            required
+          >
+
+          <button class="primary" type="submit">
+            Odpečetit záznam
+          </button>
+        </form>
+
+        <p id="taskMessage" class="message" aria-live="polite"></p>
+
+        <article id="taskContent" class="task-content" hidden>
+          <div class="eyebrow" id="taskLabel"></div>
+          <h3 id="taskTitle"></h3>
+          <p id="taskDescription"></p>
+          <p class="muted" id="taskHint"></p>
+        </article>
+      </section>
+    </section>
+
+  </main>
+
+  <footer>
+    ARCHIV 24  ·  PŘÍSTUP K ZÁZNAMŮM OMEZEN  ·  KDO ČTE, TEN NENESE JEN VĚDĚNÍ, ALE I JEHO DŮSLEDKY
+  </footer>
+
+  <script>
+    /*
+      ARCHIV 24 — TESTOVACÍ VERZE
+
+      DŮLEŽITÉ:
+      Kódy v tomto souboru jsou veřejně čitelné.
+      Používej pouze testovací herní kódy, nikoli skutečná hesla.
+    */
+
+    // 1. OSOBNÍ KÓDY STRÁŽKYŇ
+    // Před spuštěním hry změň testovací kódy podle potřeby.
+    const guardians = {
+      "EIRA-TEST-01": {
+        name: "Eira Frostová",
+        role: "Strážkyně zimy",
+        motto:
+          "Led si pamatuje i to, co se celý svět snaží zapomenout.",
+        description:
+          "Eira věří v přesné důkazy, pořádek a povinnost. " +
+          "Některé informace si však nechává pro sebe."
+      },
+
+      "VESPER-TEST-02": {
+        name: "Vesper Noctisová",
+        role: "Strážkyně podzimu",
+        motto: "Stopa není totéž co důkaz.",
+        description:
+          "Vesper pozoruje drobné změny a rozpory. " +
+          "Stíny ale nikdy neukazují celou pravdu."
+      },
+
+      "NYRA-TEST-03": {
+        name: "Nyra Havranová",
+        role: "Strážkyně jara",
+        motto:
+          "Vzpomínka může být pravdivá, a přesto nemusí znamenat to, co si myslíš.",
+        description:
+          "Nyra je klidná, trpělivá a všímavá. " +
+          "Někdy si své myšlenky nechává pro sebe."
+      },
+
+      "SELENE-TEST-04": {
+        name: "Selene Zvonková",
+        role: "Strážkyně léta",
+        motto: "Přesný záznam není automaticky pravdivý.",
+        description:
+          "Selene skládá události do časových os. " +
+          "I přesný záznam může vynechat důležitou část."
+      },
+
+      "LUMI-TEST-05": {
+        name: "Lumi Zlatolístková",
+        role: "Strážkyně Vánoc",
+        motto: "Nemusíš být nejmocnější, abys byla důležitá.",
+        description:
+          "Lumi věří v pomoc druhým a sílu spolupráce. " +
+          "Často však pochybuje o vlastních schopnostech."
+      }
+    };
+
+    // 2. TESTOVACÍ DENNÍ KÓDY
+    // Každý kód odemkne jeden úkol.
+    // Nové dny přidáš jako další položky.
+    const dailyTasks = {
+      "DEN1-ARCHIV": {
+        label: "DEN 1",
+        title: "První záznam",
+        description:
+          "Prohlédni si dostupné informace o své strážkyni. " +
+          "Zapiš si jednu otázku, na kterou zatím neznáš odpověď.",
+        hint:
+          "Výzva: Jakou informaci bys potřebovala získat, " +
+          "abys mohla svou otázku ověřit?"
+      },
+
+      "DEN2-STOPA": {
+        label: "DEN 2",
+        title: "Rozdíl mezi stopou a důkazem",
+        description:
+          "Vrať se ke své otázce z prvního dne. " +
+          "Rozděl své poznámky na ověřené informace a domněnky.",
+        hint:
+          "Výzva: Jaký nový důkaz by mohl tvou domněnku potvrdit " +
+          "nebo vyvrátit?"
+      },
+
+      "DEN3-KNIHOVNA": {
+        label: "DEN 3",
+        title: "Společné vyšetřování",
+        description:
+          "Promluv si s ostatními hráčkami a porovnejte své poznámky. " +
+          "Hledejte rozpory, ale nevyvozujte závěry bez důkazů.",
+        hint:
+          "Výzva: Která informace vám stále chybí?"
+      }
+    };
+
+    // 3. ODKAZY NA HTML PRVKY
+    const loginScreen = document.getElementById("loginScreen");
+    const profileScreen = document.getElementById("profileScreen");
+
+    const loginForm = document.getElementById("loginForm");
+    const personalCode = document.getElementById("personalCode");
+    const loginMessage = document.getElementById("loginMessage");
+
+    const guardianName = document.getElementById("guardianName");
+    const guardianRole = document.getElementById("guardianRole");
+    const guardianMotto = document.getElementById("guardianMotto");
+    const guardianDescription =
+      document.getElementById("guardianDescription");
+
+    const logoutButton = document.getElementById("logoutButton");
+
+    const taskForm = document.getElementById("taskForm");
+    const dailyCode = document.getElementById("dailyCode");
+    const taskMessage = document.getElementById("taskMessage");
+    const taskContent = document.getElementById("taskContent");
+
+    const taskLabel = document.getElementById("taskLabel");
+    const taskTitle = document.getElementById("taskTitle");
+    const taskDescription = document.getElementById("taskDescription");
+    const taskHint = document.getElementById("taskHint");
+
+    let currentGuardian = null;
+
+    // 4. POMOCNÁ FUNKCE PRO ZPRÁVY
+    function showMessage(element, text, type) {
+      element.textContent = text;
+      element.className = "message " + type;
+    }
+
+    // 5. OSOBNÍ PŘIHLÁŠENÍ
+    loginForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const enteredCode = personalCode.value.trim().toUpperCase();
+      const guardian = guardians[enteredCode];
+
+      if (!guardian) {
+        showMessage(
+          loginMessage,
+          "Pečeť není rozpoznána. Brána zůstává uzavřena.",
+          "error"
+        );
+        return;
+      }
+
+      currentGuardian = guardian;
+
+      guardianName.textContent = guardian.name;
+      guardianRole.textContent = guardian.role;
+      guardianMotto.textContent = guardian.motto;
+      guardianDescription.textContent = guardian.description;
+
+      loginScreen.hidden = true;
+      profileScreen.hidden = false;
+
+      personalCode.value = "";
+      loginMessage.textContent = "";
+      dailyCode.value = "";
+      taskMessage.textContent = "";
+      taskContent.hidden = true;
+    });
+
+    // 6. DENNÍ ÚKOL
+    taskForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      if (!currentGuardian) {
+        return;
+      }
+
+      const enteredCode = dailyCode.value.trim().toUpperCase();
+      const task = dailyTasks[enteredCode];
+
+      if (!task) {
+        showMessage(
+          taskMessage,
+          "Tento znak není v žádném známém svitku.",
+          "error"
+        );
+        taskContent.hidden = true;
+        return;
+      }
+
+      taskLabel.textContent = task.label;
+      taskTitle.textContent = task.title;
+      taskDescription.textContent = task.description;
+      taskHint.textContent = task.hint;
+
+      taskContent.hidden = false;
+
+      showMessage(
+        taskMessage,
+        "Pečeť uznána. Záznam byl odhalen.",
+        "success"
+      );
+
+      dailyCode.value = "";
+    });
+
+    // 7. ODHLÁŠENÍ
+    logoutButton.addEventListener("click", function() {
+      currentGuardian = null;
+
+      profileScreen.hidden = true;
+      loginScreen.hidden = false;
+
+      personalCode.value = "";
+      dailyCode.value = "";
+
+      taskContent.hidden = true;
+      loginMessage.textContent = "";
+      taskMessage.textContent = "";
+
+      personalCode.focus();
+    });
+  </script>
+</body>
+</html>
